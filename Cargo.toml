@@ -10,6 +10,15 @@ rust-version = "1.74"
 readme = "README.md"
 repository = "https://github.com/anthropics/funpay-client"
 documentation = "https://docs.rs/funpay-client"
+exclude = [
+    "target/",
+    ".git/",
+    ".vscode/",
+    ".idea/",
+    ".claude/",
+    "*.swp",
+    "*.swo",
+]
 
 [features]
 default = ["json-storage"]
