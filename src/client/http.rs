@@ -238,10 +238,7 @@ impl FunpayGateway for ReqwestGateway {
         Ok(v)
     }
 
-    async fn post_offer_save(
-        &self,
-        request: OfferSaveRequest<'_>,
-    ) -> Result<Value, FunPayError> {
+    async fn post_offer_save(&self, request: OfferSaveRequest<'_>) -> Result<Value, FunPayError> {
         let url = self.urls.offer_save();
         let form_created_at = SystemTime::now()
             .duration_since(UNIX_EPOCH)
@@ -277,8 +274,14 @@ impl FunpayGateway for ReqwestGateway {
             field("server_id", request.params.server_id.as_deref()),
             field("fields[desc][ru]", request.params.desc_ru.as_deref()),
             field("fields[desc][en]", request.params.desc_en.as_deref()),
-            field("fields[payment_msg][ru]", request.params.payment_msg_ru.as_deref()),
-            field("fields[payment_msg][en]", request.params.payment_msg_en.as_deref()),
+            field(
+                "fields[payment_msg][ru]",
+                request.params.payment_msg_ru.as_deref(),
+            ),
+            field(
+                "fields[payment_msg][en]",
+                request.params.payment_msg_en.as_deref(),
+            ),
             field("fields[summary][ru]", request.params.summary_ru.as_deref()),
             field("fields[summary][en]", request.params.summary_en.as_deref()),
             field("fields[game]", request.params.game.as_deref()),
@@ -328,7 +331,12 @@ impl FunpayGateway for ReqwestGateway {
             .header(header::REFERER, referer)
             .body(payload);
 
-        let req = self.add_common_headers(req, request.golden_key, request.user_agent, request.phpsessid);
+        let req = self.add_common_headers(
+            req,
+            request.golden_key,
+            request.user_agent,
+            request.phpsessid,
+        );
         let resp = self.execute(req).await?;
 
         let status = resp.status();

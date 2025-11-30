@@ -36,10 +36,7 @@ pub trait FunpayGateway: Send + Sync {
         objects_json: &str,
         request_json: Option<&str>,
     ) -> Result<Value, FunPayError>;
-    async fn post_offer_save(
-        &self,
-        request: OfferSaveRequest<'_>,
-    ) -> Result<Value, FunPayError>;
+    async fn post_offer_save(&self, request: OfferSaveRequest<'_>) -> Result<Value, FunPayError>;
     async fn get_offer_edit_page(
         &self,
         golden_key: &str,

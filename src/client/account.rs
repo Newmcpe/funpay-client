@@ -7,7 +7,8 @@ use crate::events::Event;
 use crate::models::enums::SubcategoryType;
 use crate::models::ids::ChatId;
 use crate::models::{
-    CategoryFilter, CategorySubcategory, MarketOffer, Message, Offer, OfferEditParams, OfferFullParams, OfferSaveRequest, Order, OrderShortcut, Subcategory
+    CategoryFilter, CategorySubcategory, MarketOffer, Message, Offer, OfferEditParams,
+    OfferFullParams, OfferSaveRequest, Order, OrderShortcut, Subcategory,
 };
 use crate::parsing::{
     parse_category_filters, parse_category_subcategories, parse_market_offers, parse_message_html,
