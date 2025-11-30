@@ -2,7 +2,7 @@ use crate::client::urls::UrlBuilder;
 use crate::client::FunpayGateway;
 use crate::config::FunPayConfig;
 use crate::error::FunPayError;
-use crate::models::OfferEditParams;
+use crate::models::OfferSaveRequest;
 use async_trait::async_trait;
 use reqwest::{header, redirect::Policy, Client, StatusCode};
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware};
@@ -240,13 +240,7 @@ impl FunpayGateway for ReqwestGateway {
 
     async fn post_offer_save(
         &self,
-        golden_key: &str,
-        user_agent: &str,
-        phpsessid: Option<&str>,
-        csrf: &str,
-        offer_id: i64,
-        node_id: i64,
-        params: &OfferEditParams,
+        request: OfferSaveRequest<'_>,
     ) -> Result<Value, FunPayError> {
         let url = self.urls.offer_save();
         let form_created_at = SystemTime::now()
@@ -263,58 +257,58 @@ impl FunpayGateway for ReqwestGateway {
         };
 
         let mut form_parts = vec![
-            format!("csrf_token={}", urlencoding::encode(csrf)),
+            format!("csrf_token={}", urlencoding::encode(request.csrf)),
             format!("form_created_at={form_created_at}"),
-            format!("offer_id={offer_id}"),
-            format!("node_id={node_id}"),
-            field("location", params.location.as_deref()),
+            format!("offer_id={}", request.offer_id),
+            format!("node_id={}", request.node_id),
+            field("location", request.params.location.as_deref()),
             format!(
                 "deleted={}",
-                if params.deleted.unwrap_or(false) {
+                if request.params.deleted.unwrap_or(false) {
                     "1"
                 } else {
                     ""
                 }
             ),
-            field("fields[quantity]", params.quantity.as_deref()),
-            field("fields[quantity2]", params.quantity2.as_deref()),
-            field("fields[method]", params.method.as_deref()),
-            field("fields[type]", params.offer_type.as_deref()),
-            field("server_id", params.server_id.as_deref()),
-            field("fields[desc][ru]", params.desc_ru.as_deref()),
-            field("fields[desc][en]", params.desc_en.as_deref()),
-            field("fields[payment_msg][ru]", params.payment_msg_ru.as_deref()),
-            field("fields[payment_msg][en]", params.payment_msg_en.as_deref()),
-            field("fields[summary][ru]", params.summary_ru.as_deref()),
-            field("fields[summary][en]", params.summary_en.as_deref()),
-            field("fields[game]", params.game.as_deref()),
-            field("fields[images]", params.images.as_deref()),
-            field("price", params.price.as_deref()),
+            field("fields[quantity]", request.params.quantity.as_deref()),
+            field("fields[quantity2]", request.params.quantity2.as_deref()),
+            field("fields[method]", request.params.method.as_deref()),
+            field("fields[type]", request.params.offer_type.as_deref()),
+            field("server_id", request.params.server_id.as_deref()),
+            field("fields[desc][ru]", request.params.desc_ru.as_deref()),
+            field("fields[desc][en]", request.params.desc_en.as_deref()),
+            field("fields[payment_msg][ru]", request.params.payment_msg_ru.as_deref()),
+            field("fields[payment_msg][en]", request.params.payment_msg_en.as_deref()),
+            field("fields[summary][ru]", request.params.summary_ru.as_deref()),
+            field("fields[summary][en]", request.params.summary_en.as_deref()),
+            field("fields[game]", request.params.game.as_deref()),
+            field("fields[images]", request.params.images.as_deref()),
+            field("price", request.params.price.as_deref()),
         ];
 
-        if params.deactivate_after_sale.unwrap_or(false) {
+        if request.params.deactivate_after_sale.unwrap_or(false) {
             form_parts.push(field("deactivate_after_sale[]", None));
             form_parts.push(field("deactivate_after_sale[]", Some("on")));
         } else {
             form_parts.push(field("deactivate_after_sale", None));
         }
 
-        if params.active.unwrap_or(true) {
+        if request.params.active.unwrap_or(true) {
             form_parts.push(field("active", Some("on")));
         } else {
             form_parts.push(field("active", None));
         }
 
         let payload = form_parts.join("&");
-        let referer = self.urls.offer_edit(node_id, offer_id);
+        let referer = self.urls.offer_edit(request.node_id, request.offer_id);
 
         log::debug!(
             target: "funpay_client",
             "POST {} | offer_id={} node_id={} price={:?}\nPayload: {}",
             url,
-            offer_id,
-            node_id,
-            params.price,
+            request.offer_id,
+            request.node_id,
+            request.params.price,
             payload
         );
 
@@ -334,7 +328,7 @@ impl FunpayGateway for ReqwestGateway {
             .header(header::REFERER, referer)
             .body(payload);
 
-        let req = self.add_common_headers(req, golden_key, user_agent, phpsessid);
+        let req = self.add_common_headers(req, request.golden_key, request.user_agent, request.phpsessid);
         let resp = self.execute(req).await?;
 
         let status = resp.status();

@@ -84,7 +84,7 @@ impl FunPayPoller {
                             }
                             if let Some(max_id) = msgs.iter().map(|m| m.id).max() {
                                 let prev = self.last_messages_ids.insert(cid, max_id);
-                                if prev.map_or(true, |value| value != max_id) {
+                                if prev != Some(max_id) {
                                     persist_required = true;
                                 }
                             }

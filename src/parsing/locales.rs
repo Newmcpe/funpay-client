@@ -20,5 +20,5 @@ pub const REFUND: &[&str] = &["Возврат", "Повернення", "Refund"
 pub const CLOSED: &[&str] = &["Закрыт", "Закрито", "Closed"];
 
 pub fn matches_any(text: &str, variants: &[&str]) -> bool {
-    variants.iter().any(|v| *v == text)
+    variants.contains(&text)
 }

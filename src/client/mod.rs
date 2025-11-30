@@ -1,5 +1,5 @@
 use crate::error::FunPayError;
-use crate::models::OfferEditParams;
+use crate::models::OfferSaveRequest;
 use async_trait::async_trait;
 use serde_json::Value;
 
@@ -38,13 +38,7 @@ pub trait FunpayGateway: Send + Sync {
     ) -> Result<Value, FunPayError>;
     async fn post_offer_save(
         &self,
-        golden_key: &str,
-        user_agent: &str,
-        phpsessid: Option<&str>,
-        csrf: &str,
-        offer_id: i64,
-        node_id: i64,
-        params: &OfferEditParams,
+        request: OfferSaveRequest<'_>,
     ) -> Result<Value, FunPayError>;
     async fn get_offer_edit_page(
         &self,

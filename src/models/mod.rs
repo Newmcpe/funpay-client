@@ -5,6 +5,17 @@ use crate::models::enums::OrderStatus;
 use crate::models::ids::{ChatId, OrderId};
 use std::collections::HashMap;
 
+#[derive(Debug, Clone)]
+pub struct OfferSaveRequest<'a> {
+    pub golden_key: &'a str,
+    pub user_agent: &'a str,
+    pub phpsessid: Option<&'a str>,
+    pub csrf: &'a str,
+    pub offer_id: i64,
+    pub node_id: i64,
+    pub params: &'a OfferEditParams,
+}
+
 #[derive(Debug, Clone, Default)]
 pub struct OfferEditParams {
     pub quantity: Option<String>,

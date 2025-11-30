@@ -7,8 +7,7 @@ use crate::events::Event;
 use crate::models::enums::SubcategoryType;
 use crate::models::ids::ChatId;
 use crate::models::{
-    CategoryFilter, CategorySubcategory, MarketOffer, Message, Offer, OfferEditParams,
-    OfferFullParams, Order, OrderShortcut, Subcategory,
+    CategoryFilter, CategorySubcategory, MarketOffer, Message, Offer, OfferEditParams, OfferFullParams, OfferSaveRequest, Order, OrderShortcut, Subcategory
 };
 use crate::parsing::{
     parse_category_filters, parse_category_subcategories, parse_market_offers, parse_message_html,
@@ -457,15 +456,15 @@ impl FunPaySender {
         );
 
         self.gateway
-            .post_offer_save(
-                &self.golden_key,
-                &self.user_agent,
-                self.phpsessid.as_deref(),
-                &self.csrf_token,
+            .post_offer_save(OfferSaveRequest {
+                golden_key: &self.golden_key,
+                user_agent: &self.user_agent,
+                phpsessid: self.phpsessid.as_deref(),
+                csrf: &self.csrf_token,
                 offer_id,
                 node_id,
-                &merged,
-            )
+                params: &merged,
+            })
             .await
     }
 
