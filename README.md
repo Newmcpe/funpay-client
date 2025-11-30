@@ -2,7 +2,7 @@
 
 [![Crates.io](https://img.shields.io/crates/v/funpay-client.svg)](https://crates.io/crates/funpay-client)
 [![Documentation](https://docs.rs/funpay-client/badge.svg)](https://docs.rs/funpay-client)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: WTFPL](https://img.shields.io/badge/License-WTFPL-brightgreen.svg)](http://www.wtfpl.net/about/)
 
 Unofficial async Rust client for FunPay marketplace. Authenticate via `golden_key`, receive real-time events for chats and orders.
 
@@ -194,5 +194,5 @@ impl StateStorage for RedisStorage {
 
 ## Requirements
 
-- Rust 1.83+
+- Rust 1.84+
 - Tokio 1.x
