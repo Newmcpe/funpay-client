@@ -2,7 +2,18 @@
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(cargo publish:*)",
+      "Bash(git push:*)",
+      "Bash(cargo fmt:*)",
+      "Bash(cargo clippy:*)",
+      "Bash(cargo tree:*)",
+      "Bash(cargo update:*)",
+      "Bash(cargo check:*)",
+      "Bash(cargo package:*)",
+      "Bash(git reset:*)",
+      "Bash(GIT_SEQUENCE_EDITOR=\"sed -i ''s/^pick 6641fd1/edit 6641fd1/; s/^pick 0f1c352/edit 0f1c352/; s/^pick 3026730/edit 3026730/''\" git rebase -i 1e27c11)",
+      "Bash(git stash:*)"
     ],
     "deny": [],
     "ask": []
