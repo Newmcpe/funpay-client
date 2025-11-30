@@ -4,7 +4,7 @@ use crate::config::FunPayConfig;
 use crate::error::FunPayError;
 use crate::models::OfferEditParams;
 use async_trait::async_trait;
-use reqwest::{Client, StatusCode, header, redirect::Policy};
+use reqwest::{header, redirect::Policy, Client, StatusCode};
 use reqwest_middleware::{ClientBuilder, ClientWithMiddleware};
 use reqwest_retry::{policies::ExponentialBackoff, RetryTransientMiddleware};
 use serde_json::Value;
@@ -154,10 +154,7 @@ impl FunpayGateway for ReqwestGateway {
         chat_id: &str,
     ) -> Result<(String, Vec<String>), FunPayError> {
         let chat_url = self.urls.chat_page(chat_id);
-        let req = self
-            .client
-            .get(&chat_url)
-            .header(header::ACCEPT, "*/*");
+        let req = self.client.get(&chat_url).header(header::ACCEPT, "*/*");
         let req = self.add_common_headers(req, golden_key, user_agent, None);
         let resp = self.execute(req).await?;
 

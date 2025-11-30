@@ -91,7 +91,11 @@ impl FunPayAccount {
         Self::with_proxy_and_config(golden_key, proxy_url, FunPayConfig::default())
     }
 
-    pub fn with_proxy_and_config(golden_key: String, proxy_url: &str, config: FunPayConfig) -> Self {
+    pub fn with_proxy_and_config(
+        golden_key: String,
+        proxy_url: &str,
+        config: FunPayConfig,
+    ) -> Self {
         let gateway: Arc<dyn FunpayGateway> =
             Arc::new(ReqwestGateway::with_proxy_and_config(proxy_url, &config));
         Self::with_gateway_and_config(gateway, golden_key, config)

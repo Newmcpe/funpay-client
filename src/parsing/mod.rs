@@ -11,5 +11,7 @@ pub use forms::{
     extract_textarea_value,
 };
 pub use message::parse_message_html;
-pub use offers::{parse_market_offers, parse_my_offers, parse_offer_edit_params, parse_offer_full_params};
+pub use offers::{
+    parse_market_offers, parse_my_offers, parse_offer_edit_params, parse_offer_full_params,
+};
 pub use orders::{parse_order_page, parse_order_secrets, parse_orders_list};

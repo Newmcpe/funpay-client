@@ -10,7 +10,10 @@ async fn main() -> anyhow::Result<()> {
     let mut account = FunPayAccount::new(golden_key);
     account.init().await?;
 
-    println!("Logged in as: {:?} (id: {:?})", account.username, account.id);
+    println!(
+        "Logged in as: {:?} (id: {:?})",
+        account.username, account.id
+    );
 
     let mut rx = account.subscribe();
 
