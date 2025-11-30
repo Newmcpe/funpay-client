@@ -194,5 +194,5 @@ impl StateStorage for RedisStorage {
 
 ## Requirements
 
-- Rust 1.74+
+- Rust 1.83+
 - Tokio 1.x
