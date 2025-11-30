@@ -196,7 +196,3 @@ impl StateStorage for RedisStorage {
 
 - Rust 1.74+
 - Tokio 1.x
-
-## License
-
-MIT
