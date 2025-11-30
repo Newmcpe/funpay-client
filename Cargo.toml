@@ -1,6 +1,6 @@
 [package]
 name = "funpay-client"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 description = "Unofficial async client for FunPay marketplace - chats, orders, offers polling"
 license = "WTFPL"
