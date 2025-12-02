@@ -396,4 +396,35 @@ impl FunpayGateway for ReqwestGateway {
         let body = resp.text().await?;
         Ok(body)
     }
+
+    async fn calc_price(
+        &self,
+        golden_key: &str,
+        user_agent: &str,
+        node_id: i64,
+        price: f64,
+    ) -> Result<Value, FunPayError> {
+        let url = self.urls.lots_calc();
+        let payload = format!("nodeId={}&price={}", node_id, price as i64);
+
+        let req = self
+            .client
+            .post(&url)
+            .header(
+                header::CONTENT_TYPE,
+                "application/x-www-form-urlencoded; charset=UTF-8",
+            )
+            .header("x-requested-with", "XMLHttpRequest")
+            .header(
+                header::ACCEPT,
+                "application/json, text/javascript, */*; q=0.01",
+            )
+            .header(header::ORIGIN, self.urls.base_url())
+            .body(payload);
+
+        let req = self.add_common_headers(req, golden_key, user_agent, None);
+        let resp = self.execute(req).await?;
+        let v: Value = resp.json().await?;
+        Ok(v)
+    }
 }

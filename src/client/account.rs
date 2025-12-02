@@ -526,4 +526,10 @@ impl FunPaySender {
             .await?;
         Ok(parse_category_filters(&html))
     }
+
+    pub async fn calc_price(&self, node_id: i64, price: f64) -> Result<Value, FunPayError> {
+        self.gateway
+            .calc_price(&self.golden_key, &self.user_agent, node_id, price)
+            .await
+    }
 }

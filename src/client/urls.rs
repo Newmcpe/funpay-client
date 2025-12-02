@@ -61,4 +61,8 @@ impl UrlBuilder {
     pub fn lots_page(&self, node_id: i64) -> String {
         format!("{}/lots/{node_id}/", self.base_url)
     }
+
+    pub fn lots_calc(&self) -> String {
+        format!("{}/lots/calc", self.base_url)
+    }
 }

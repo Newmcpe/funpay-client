@@ -56,6 +56,13 @@ pub trait FunpayGateway: Send + Sync {
         user_agent: &str,
         node_id: i64,
     ) -> Result<String, FunPayError>;
+    async fn calc_price(
+        &self,
+        golden_key: &str,
+        user_agent: &str,
+        node_id: i64,
+        price: f64,
+    ) -> Result<Value, FunPayError>;
 }
 
 pub mod account;
